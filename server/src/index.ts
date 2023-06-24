@@ -14,7 +14,7 @@ import { helloResolver } from "./resolves/hello";
 
 const main = async () => {
   const orm = await MikroORM.init(microConfig);
-  // const fork = orm.em.fork();
+  const fork = orm.em.fork();
   await orm.getMigrator().up();
 
   const app = express();
@@ -27,7 +27,14 @@ const main = async () => {
 
   await server.start();
 
-  app.use("/graphql", expressMiddleware(server));
+  app.use(
+    "/graphql",
+    expressMiddleware(server, {
+      context: async () => ({
+        fork,
+      }),
+    })
+  );
 
   app.listen(process.env.APP_PORT, () => {
     console.log("Server started on localhost:4000");

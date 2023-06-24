@@ -2,16 +2,25 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.typeDefs = void 0;
 exports.typeDefs = `#graphql
-    type Query {
-        posts: [Post]
-        hello: String
-    }
 
     type Post {
-        id: ID
+        id: Int
         createdAt: String
         updatedAt: String
         title: String
     }
+
+    type Query {
+        posts: [Post]
+        post(id: Int): Post
+        hello: String
+    }
+
+    type Mutation {
+        createPost(title: String): Post
+        updatePost(id: Int, title: String): Post
+        deletePost(id: Int): Boolean
+    }
+    
 `;
 //# sourceMappingURL=index.js.map

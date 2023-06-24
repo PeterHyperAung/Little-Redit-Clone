@@ -15,6 +15,7 @@ const post_1 = require("./resolves/post");
 const hello_1 = require("./resolves/hello");
 const main = async () => {
     const orm = await core_1.MikroORM.init(mikro_orm_config_1.default);
+    const fork = orm.em.fork();
     await orm.getMigrator().up();
     const app = (0, express_1.default)();
     app.use(express_1.default.json());
@@ -23,7 +24,11 @@ const main = async () => {
         resolvers: [post_1.postResolver, hello_1.helloResolver],
     });
     await server.start();
-    app.use("/graphql", (0, express4_1.expressMiddleware)(server));
+    app.use("/graphql", (0, express4_1.expressMiddleware)(server, {
+        context: async () => ({
+            fork,
+        }),
+    }));
     app.listen(process.env.APP_PORT, () => {
         console.log("Server started on localhost:4000");
     });
