@@ -30,9 +30,13 @@ __decorate([
     __metadata("design:type", Object)
 ], User.prototype, "updatedAt", void 0);
 __decorate([
+    (0, core_1.Property)({ type: "text", unique: true }),
+    __metadata("design:type", String)
+], User.prototype, "username", void 0);
+__decorate([
     (0, core_1.Property)({ type: "text" }),
     __metadata("design:type", String)
-], User.prototype, "title", void 0);
+], User.prototype, "password", void 0);
 exports.User = User = __decorate([
     (0, core_1.Entity)()
 ], User);

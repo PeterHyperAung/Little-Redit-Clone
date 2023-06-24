@@ -1,4 +1,4 @@
-import { Post } from "../entities/Post";
+import { Post } from "../entities";
 import { MyContext } from "src/types";
 
 export const postResolver = {

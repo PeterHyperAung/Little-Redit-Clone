@@ -1,5 +1,5 @@
 import { __dev__ } from "./constants";
-import { Post } from "./entities/Post";
+import { Post, User } from "./entities";
 import { Options, PostgreSqlDriver } from "@mikro-orm/postgresql";
 import path from "path";
 
@@ -7,7 +7,7 @@ const config: Options = {
   migrations: {
     path: path.join(__dirname, "./migrations"),
   },
-  entities: [Post],
+  entities: [Post, User],
   dbName: "lireddit",
   host: process.env.DATABASE_HOST,
   user: process.env.DATABASE_USER,

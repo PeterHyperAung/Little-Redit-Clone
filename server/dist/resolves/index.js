@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resolvers = void 0;
+exports.userResolver = exports.postResolver = void 0;
 const post_1 = require("./post");
-exports.resolvers = {
-    Query: {
-        posts: post_1.postResolver,
-    },
-};
+Object.defineProperty(exports, "postResolver", { enumerable: true, get: function () { return post_1.postResolver; } });
+const user_1 = require("./user");
+Object.defineProperty(exports, "userResolver", { enumerable: true, get: function () { return user_1.userResolver; } });
 //# sourceMappingURL=index.js.map
