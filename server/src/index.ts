@@ -31,20 +31,24 @@ const main = async () => {
   await orm.getMigrator().up();
 
   const app = express();
+
   app.use(express.json());
+  app.use((req, res, next) => {
+    req.headers["x-forwarded-proto"] = "https";
+    next();
+  });
 
   app.use(
     session({
       name: "qid",
       store: redisStore as unknown as Store,
-      resave: false, // required: force lightweight session keep alive (touch)
       saveUninitialized: false, // recommended: only save session when data exists
       secret: "keyboard cat",
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
         httpOnly: true,
-        sameSite: "lax", // csrf
-        secure: !__dev__, // cookie only works in https
+        sameSite: "none", // csrf
+        secure: true, // cookie only works in https
       },
     })
   );

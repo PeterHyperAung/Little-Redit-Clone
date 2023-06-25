@@ -4,7 +4,8 @@ import argon2 from "argon2";
 
 export const userResolver = {
   Query: {
-    async me({ fork, req }: MyContext) {
+    async me(_: any, __: any, { fork, req }: MyContext) {
+      console.log(req);
       if (!req?.session.userId) {
         return null;
       }
@@ -66,7 +67,7 @@ export const userResolver = {
     async login(
       _: any,
       { options: { username, password } }: RegisterArgsType,
-      { fork, req }: MyContext
+      { fork, req, res }: MyContext
     ): Promise<UserResponse> {
       const user = await fork.findOne(User, { username: username });
       if (!user) {
@@ -92,7 +93,26 @@ export const userResolver = {
         };
       }
 
-      (req?.session as ISession).userId = user.id;
+      // const session: ISession = await new Promise((resolve, reject) => {
+      //   req.session.save(function (err) {
+      //     if (err) {
+      //       reject(err);
+      //     }
+
+      //     resolve(req.session);
+      //   });
+      // });
+
+      req.session.userId = user.id;
+
+      res.set(
+        "Access-Control-Allow-Origin",
+        "https://sandbox.embed.apollographql.com"
+      );
+      res.set("Access-Control-Allow-Credentials", "true");
+      // res.set("trust proxy", "127.0.0.1");
+
+      console.log("Session2 : ", req.session);
 
       return { user };
     },

@@ -9,7 +9,6 @@ const dotenv_1 = require("dotenv");
 const express_1 = __importDefault(require("express"));
 const server_1 = require("@apollo/server");
 const express4_1 = require("@apollo/server/express4");
-const constants_1 = require("./constants");
 const mikro_orm_config_1 = __importDefault(require("./mikro-orm.config"));
 const typeDefs_1 = require("./typeDefs");
 const resolves_1 = require("./resolves");
@@ -29,17 +28,20 @@ const main = async () => {
     await orm.getMigrator().up();
     const app = (0, express_1.default)();
     app.use(express_1.default.json());
+    app.use((req, res, next) => {
+        req.headers["x-forwarded-proto"] = "https";
+        next();
+    });
     app.use((0, express_session_1.default)({
         name: "qid",
         store: redisStore,
-        resave: false,
         saveUninitialized: false,
         secret: "keyboard cat",
         cookie: {
             maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
             httpOnly: true,
-            sameSite: "lax",
-            secure: !constants_1.__dev__,
+            sameSite: "none",
+            secure: true,
         },
     }));
     const server = new server_1.ApolloServer({

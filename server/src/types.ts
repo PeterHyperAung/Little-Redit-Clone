@@ -9,8 +9,8 @@ export interface ISession extends Session {
 
 export type MyContext = {
   fork: SqlEntityManager<PostgreSqlDriver>;
-  req?: Request & { session: ISession };
-  res?: Response;
+  req: Request & { session: ISession };
+  res: Response;
 };
 
 export type RegisterArgsType = {
@@ -28,4 +28,5 @@ export type FieldError = {
 export type UserResponse = {
   errors?: FieldError[];
   user?: User;
+  req?: Request & { session: ISession };
 };

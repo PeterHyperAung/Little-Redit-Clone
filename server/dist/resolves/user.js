@@ -8,7 +8,8 @@ const entities_1 = require("../entities");
 const argon2_1 = __importDefault(require("argon2"));
 exports.userResolver = {
     Query: {
-        async me({ fork, req }) {
+        async me(_, __, { fork, req }) {
+            console.log(req);
             if (!(req === null || req === void 0 ? void 0 : req.session.userId)) {
                 return null;
             }
@@ -58,7 +59,7 @@ exports.userResolver = {
             }
             return { user };
         },
-        async login(_, { options: { username, password } }, { fork, req }) {
+        async login(_, { options: { username, password } }, { fork, req, res }) {
             const user = await fork.findOne(entities_1.User, { username: username });
             if (!user) {
                 return {
@@ -81,7 +82,10 @@ exports.userResolver = {
                     ],
                 };
             }
-            (req === null || req === void 0 ? void 0 : req.session).userId = user.id;
+            req.session.userId = user.id;
+            res.set("Access-Control-Allow-Origin", "https://sandbox.embed.apollographql.com");
+            res.set("Access-Control-Allow-Credentials", "true");
+            console.log("Session2 : ", req.session);
             return { user };
         },
     },
